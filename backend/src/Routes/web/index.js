@@ -1,5 +1,7 @@
+const { webCtrl } = require('../../Controllers');
+
 const webRoutes = require('express').Router();
 
-webRoutes.get('/', (req, res) => res.send('This is Home Page'));
+webRoutes.get('/', webCtrl.renderHomePage);
 
 module.exports = webRoutes;
