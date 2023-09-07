@@ -65,8 +65,10 @@
             <td><%=user.username %></td>
             <td>
               <div class="d-flex gap-2">
-                <button class="btn btn-primary" type="button">Edit</button>
-                <button class="btn btn-danger" type="button">Remove</button>
+                <button class="btn btn-primary">Edit</button>
+                <form action="/delete/<%=user.id %>" method="POST">
+                  <button class="btn btn-danger" type="submit">Remove</button>
+                </form>
               </div>
             </td>
           </tr>

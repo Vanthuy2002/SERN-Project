@@ -24,11 +24,14 @@ const createUser = (email, password, username) => {
 };
 
 const getUsers = async () => {
-  let users = [];
   const connection = await AsyncUsersDb;
   const [rows] = await connection.execute('SELECT * FROM `users`');
-  users = rows;
-  return users;
+  return rows;
 };
 
-module.exports = { createUser, getUsers };
+const deleteUser = async (id) => {
+  const connection = await AsyncUsersDb;
+  await connection.execute('DELETE FROM users WHERE id=?', [id]);
+};
+
+module.exports = { createUser, getUsers, deleteUser };

@@ -8,4 +8,6 @@ webRoutes.get('/user', webCtrl.renderUserPages);
 
 webRoutes.post('/user/create', webCtrl.handleCreateUsers);
 
+webRoutes.post('/delete/:id', webCtrl.handleDeleteUser);
+
 module.exports = webRoutes;

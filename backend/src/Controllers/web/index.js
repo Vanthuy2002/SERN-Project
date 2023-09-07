@@ -1,4 +1,8 @@
-const { createUser, getUsers } = require('../../Services/user.services');
+const {
+  createUser,
+  getUsers,
+  deleteUser,
+} = require('../../Services/user.services');
 
 const renderHomePage = async (req, res) => {
   try {
@@ -22,9 +26,19 @@ const handleCreateUsers = async (req, res) => {
   const { email, password, username } = req.body;
   try {
     createUser(email, password, username);
-    res.status(201).json({ message: 'Create user successfully!!' });
+    res.status(201).redirect('back');
   } catch (exection) {
     res.status(400).json({ message: exection.toString() });
+  }
+};
+
+const handleDeleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await deleteUser(id);
+    res.redirect('back');
+  } catch (exection) {
+    res.status(500).json({ message: exection.toString() });
   }
 };
 
@@ -32,5 +46,6 @@ const webCtrl = {
   renderHomePage,
   renderUserPages,
   handleCreateUsers,
+  handleDeleteUser,
 };
 module.exports = webCtrl;
