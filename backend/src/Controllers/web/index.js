@@ -1,4 +1,4 @@
-const UserDb = require('../../Model/Users');
+const { createUser, getUsers } = require('../../Services/user.services');
 
 const renderHomePage = async (req, res) => {
   try {
@@ -12,29 +12,25 @@ const renderHomePage = async (req, res) => {
 const renderUserPages = async (req, res) => {
   try {
     res.render('user.ejs');
+    const users = getUsers();
   } catch (error) {
-    console.log(error.toString());
+    res.status(404).json({ message: exection });
   }
 };
 
 const handleCreateUsers = async (req, res) => {
   const { email, password, username } = req.body;
   try {
-    if (!email || !password) {
-      throw new Error('Please enter complete data');
-    }
-    UserDb.query(
-      `INSERT INTO users (email, password, username) VALUES (?, ?, ?)`,
-      [email, password, username],
-      (err, data) => {
-        err && console.log(err.toString());
-        console.log(data);
-      }
-    );
+    createUser(email, password, username);
+    res.status(201).json({ message: 'Create user successfully!!' });
   } catch (exection) {
     res.status(400).json({ message: exection.toString() });
   }
 };
 
-const webCtrl = { renderHomePage, renderUserPages, handleCreateUsers };
+const webCtrl = {
+  renderHomePage,
+  renderUserPages,
+  handleCreateUsers,
+};
 module.exports = webCtrl;
