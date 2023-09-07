@@ -11,8 +11,8 @@ const renderHomePage = async (req, res) => {
 
 const renderUserPages = async (req, res) => {
   try {
-    res.render('user.ejs');
-    const users = getUsers();
+    const users = await getUsers();
+    res.render('user.ejs', { users });
   } catch (error) {
     res.status(404).json({ message: exection });
   }

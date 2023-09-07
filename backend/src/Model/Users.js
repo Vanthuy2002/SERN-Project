@@ -1,4 +1,5 @@
 const mysql = require('mysql2');
+const mysql2 = require('mysql2/promise');
 
 const UsersDb = mysql.createConnection({
   host: 'localhost',
@@ -6,4 +7,10 @@ const UsersDb = mysql.createConnection({
   database: 'yt-project',
 });
 
-module.exports = UsersDb;
+const AsyncUsersDb = mysql2.createConnection({
+  host: 'localhost',
+  user: 'root',
+  database: 'yt-project',
+});
+
+module.exports = { UsersDb, AsyncUsersDb };

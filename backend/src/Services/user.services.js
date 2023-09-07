@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const UserDb = require('../Model/Users');
+const { AsyncUsersDb, UsersDb } = require('../Model/Users');
 
 const hashUserPassword = (password) => {
   const salt = bcrypt.genSaltSync(10);
@@ -13,7 +13,7 @@ const createUser = (email, password, username) => {
   }
   const hashPass = hashUserPassword(password);
 
-  UserDb.query(
+  UsersDb.query(
     `INSERT INTO users (email, password, username) VALUES (?, ?, ?)`,
     [email, hashPass, username],
     (err, data) => {
@@ -23,11 +23,12 @@ const createUser = (email, password, username) => {
   );
 };
 
-const getUsers = () => {
-  UserDb.query('SELECT * FROM `users`', (err, data) => {
-    err && console.log(err.toString());
-    console.log(data);
-  });
+const getUsers = async () => {
+  let users = [];
+  const connection = await AsyncUsersDb;
+  const [rows] = await connection.execute('SELECT * FROM `users`');
+  users = rows;
+  return users;
 };
 
 module.exports = { createUser, getUsers };
