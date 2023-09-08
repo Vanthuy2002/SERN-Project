@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const { AsyncUsersDb, UsersDb } = require('../Model/Users');
+const { AsyncUsersDb, UsersDb } = require('../configDB/Users');
 
 const hashUserPassword = (password) => {
   const salt = bcrypt.genSaltSync(10);

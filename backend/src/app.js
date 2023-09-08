@@ -7,6 +7,7 @@ const connectDb = require('./db');
 dotenv.config();
 const app = express();
 
+// config / Routes / Connect SQL
 config(app);
 defineRoutes(app);
 connectDb();
