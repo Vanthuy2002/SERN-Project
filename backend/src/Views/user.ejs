@@ -65,7 +65,8 @@
             <td><%=user.username %></td>
             <td>
               <div class="d-flex gap-2">
-                <button class="btn btn-primary">Edit</button>
+                <a href="/update/<%=user.id %>" class="btn btn-primary">Edit</a>
+
                 <form action="/delete/<%=user.id %>" method="POST">
                   <button class="btn btn-danger" type="submit">Remove</button>
                 </form>

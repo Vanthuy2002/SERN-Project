@@ -34,4 +34,21 @@ const deleteUser = async (id) => {
   await connection.execute('DELETE FROM users WHERE id=?', [id]);
 };
 
-module.exports = { createUser, getUsers, deleteUser };
+const getUserById = async (id) => {
+  const connection = await AsyncUsersDb;
+  const [rows] = await connection.execute('SELECT * FROM users WHERE id=?', [
+    id,
+  ]);
+  return rows[0];
+};
+
+const updateUser = async (username, email, id) => {
+  const connection = await AsyncUsersDb;
+  const [data] = await connection.execute(
+    'UPDATE users SET email = ?, username = ? WHERE id = ?',
+    [email, username, id]
+  );
+  return data;
+};
+
+module.exports = { createUser, getUsers, deleteUser, getUserById, updateUser };
