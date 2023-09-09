@@ -19,7 +19,7 @@ const renderUserPages = async (req, res) => {
   try {
     const users = await getUsers();
     res.render('user.ejs', { users });
-  } catch (error) {
+  } catch (exection) {
     res.status(404).json({ message: exection });
   }
 };
