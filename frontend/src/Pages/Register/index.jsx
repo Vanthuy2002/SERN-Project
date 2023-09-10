@@ -1,11 +1,12 @@
 import { titlePages, validate } from '@/utils/contants';
 import { useEffect } from 'react';
 import { Col, Container, Row, Form, Button, Spinner } from 'react-bootstrap';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { api } from '@/config';
 
 const schema = yup.object({
   username: yup.string().required(validate.REQUIRED),
@@ -23,12 +24,18 @@ export default function Register() {
   const { errors, isSubmitting } = formState;
 
   const handleRegister = async (values) => {
-    if (values.password !== values.confirm) {
-      throw new Error(validate.COMFIRM);
-    }
     try {
-      console.log('🚀 ~ handleRegister ~ values:', values);
-      toast.success('Create account successfully!!');
+      if (values.password !== values.confirm) {
+        throw new Error(validate.COMFIRM);
+      }
+      const res = await api.post('api/register', values);
+      const { message, codeNum } = res.data;
+      if (codeNum === 1) {
+        toast.success(message);
+      } else {
+        toast.info(message);
+      }
+
       reset();
     } catch (exection) {
       toast.error(exection.toString());

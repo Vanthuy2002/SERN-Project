@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 const schema = yup.object({
   email: yup.string().required(validate.REQUIRED).email(validate.EMAIL),
@@ -24,7 +24,7 @@ export default function Login() {
   const handleLogin = async (values) => {
     try {
       console.log('🚀 ~ handleRegister ~ values:', values);
-      toast.success('Login successfully!!');
+      toast.success('Login!!');
       reset();
     } catch (exection) {
       toast.error(exection.toString());

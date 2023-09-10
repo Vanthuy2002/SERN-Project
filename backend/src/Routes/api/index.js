@@ -1,6 +1,6 @@
 const apiRoutes = require('express').Router();
 const { apiCtrl } = require('../../Controllers');
 
-apiRoutes.get('/test', apiCtrl.testApi);
+apiRoutes.post('/register', apiCtrl.handleRegister);
 
 module.exports = apiRoutes;
