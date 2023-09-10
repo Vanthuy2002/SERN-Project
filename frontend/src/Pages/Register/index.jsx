@@ -1,12 +1,12 @@
-import { titlePages, validate } from '@/utils/contants';
-import { useEffect } from 'react';
-import { Col, Container, Row, Form, Button, Spinner } from 'react-bootstrap';
-import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { api } from '@/config';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { titlePages, validate } from '@/utils/contants';
+import { registerServices } from '@/services/auth.services';
+import { Link, useNavigate } from 'react-router-dom';
+import { Col, Container, Row, Form, Button, Spinner } from 'react-bootstrap';
 
 const schema = yup.object({
   username: yup.string().required(validate.REQUIRED),
@@ -17,7 +17,7 @@ const schema = yup.object({
 
 export default function Register() {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState, reset } = useForm({
+  const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -28,15 +28,13 @@ export default function Register() {
       if (values.password !== values.confirm) {
         throw new Error(validate.COMFIRM);
       }
-      const res = await api.post('api/register', values);
-      const { message, codeNum } = res.data;
+      const { message, codeNum } = await registerServices(values);
       if (codeNum === 1) {
         toast.success(message);
+        navigate('/login');
       } else {
         toast.info(message);
       }
-
-      reset();
     } catch (exection) {
       toast.error(exection.toString());
     }
