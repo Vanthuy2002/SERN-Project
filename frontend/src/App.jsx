@@ -1,12 +1,12 @@
-import './App.css';
+import { Fragment } from 'react';
+import Routing from './Routes';
 import Toasty from './components/Toasty';
 
-function App() {
+export default function App() {
   return (
-    <main className='App'>
+    <Fragment>
+      <Routing />
       <Toasty />
-    </main>
+    </Fragment>
   );
 }
-
-export default App;
