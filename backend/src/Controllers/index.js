@@ -1,3 +1,4 @@
 const webCtrl = require('./web');
+const apiCtrl = require('./api');
 
-module.exports = { webCtrl };
+module.exports = { webCtrl, apiCtrl };

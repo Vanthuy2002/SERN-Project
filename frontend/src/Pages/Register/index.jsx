@@ -1,59 +1,103 @@
-import { titlePages } from '@/utils/contants';
+import { titlePages, validate } from '@/utils/contants';
 import { useEffect } from 'react';
-import { Col, Container, Row, Form, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Col, Container, Row, Form, Button, Spinner } from 'react-bootstrap';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+const schema = yup.object({
+  username: yup.string().required(validate.REQUIRED),
+  email: yup.string().required(validate.REQUIRED).email(validate.EMAIL),
+  password: yup.string().required(validate.REQUIRED).min(5, validate.MIN),
+  confirm: yup.string().required(validate.REQUIRED).min(5, validate.MIN),
+});
 
 export default function Register() {
   const navigate = useNavigate();
+  const { register, handleSubmit, formState, reset } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const { errors, isSubmitting } = formState;
+
+  const handleRegister = async (values) => {
+    if (values.password !== values.confirm) {
+      throw new Error(validate.COMFIRM);
+    }
+    try {
+      console.log('🚀 ~ handleRegister ~ values:', values);
+      toast.success('Create account successfully!!');
+      reset();
+    } catch (exection) {
+      toast.error(exection.toString());
+    }
+  };
 
   useEffect(() => {
     document.title = titlePages.REGISTER;
   }, []);
+
   return (
     <div className='bg-info-subtle'>
       <Container>
         <Row className='min-vh-100 align-items-md-center align-items-start'>
           <Col className='d-none d-md-block' md={6}>
-            <p className='h1 fw-bold text-start text-primary'>React App</p>
+            <Link to='/'>
+              <p className='fw-bold h1 mb-2 text-start text-primary'>
+                React App
+              </p>
+            </Link>
             <p className='text-start fw-semibold'>
               Login with get full access our power, do anything with your
               imagination
             </p>
           </Col>
           <Col md={6}>
-            <p className='h1 my-5 d-md-none d-block fw-bold text-center text-primary'>
-              React App
-            </p>
+            <Link to='/'>
+              <p className='h1 my-5 d-md-none d-block fw-bold text-center text-primary'>
+                React App
+              </p>
+            </Link>
             <div className='p-3 rounded shadow bg-white'>
-              <Form autoComplete='off'>
+              <Form onSubmit={handleSubmit(handleRegister)} autoComplete='off'>
                 <Form.Group className='mb-3' controlId='username'>
                   <Form.Label className='fw-semibold'>Username</Form.Label>
                   <Form.Control
                     type='text'
-                    name='username'
+                    {...register('username')}
                     className='p-3'
                     placeholder='@something...'
                   />
+                  {errors && (
+                    <p className='text-danger'>{errors?.username?.message}</p>
+                  )}
                 </Form.Group>
 
                 <Form.Group className='mb-3' controlId='email'>
                   <Form.Label className='fw-semibold'>Email</Form.Label>
                   <Form.Control
-                    type='email'
-                    name='email'
+                    {...register('email')}
                     className='p-3'
                     placeholder='name@example.com'
                   />
+                  {errors && (
+                    <p className='text-danger'>{errors?.email?.message}</p>
+                  )}
                 </Form.Group>
 
                 <Form.Group className='mb-3' controlId='password'>
                   <Form.Label className='fw-semibold'>Password</Form.Label>
                   <Form.Control
                     type='password'
-                    name='password'
+                    {...register('password')}
                     className='p-3'
                     placeholder='Your password...'
                   />
+                  {errors && (
+                    <p className='text-danger'>{errors?.password?.message}</p>
+                  )}
                 </Form.Group>
 
                 <Form.Group className='mb-3' controlId='repass'>
@@ -62,18 +106,31 @@ export default function Register() {
                   </Form.Label>
                   <Form.Control
                     type='password'
-                    name='confirm'
+                    {...register('confirm')}
                     className='p-3'
                     placeholder='Enter password again...'
                   />
+                  {errors && (
+                    <p className='text-danger'>{errors?.confirm?.message}</p>
+                  )}
                 </Form.Group>
 
                 <Button
                   style={{ padding: '12px 0' }}
                   className='w-100 fw-bolder'
                   type='submit'
+                  disabled={isSubmitting}
                 >
-                  Create accounts
+                  {isSubmitting ? (
+                    <Spinner
+                      as='span'
+                      animation='border'
+                      size='sm'
+                      variant='light'
+                    />
+                  ) : (
+                    'Create accounts'
+                  )}
                 </Button>
               </Form>
 

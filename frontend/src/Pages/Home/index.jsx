@@ -6,5 +6,5 @@ export default function Home() {
   useEffect(() => {
     document.title = titlePages.HOME;
   }, []);
-  return <MainLayout>Home Page</MainLayout>;
+  return <MainLayout></MainLayout>;
 }
