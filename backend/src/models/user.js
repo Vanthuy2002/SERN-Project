@@ -2,7 +2,10 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {}
+    static associate(models) {
+      User.belongsTo(models.Group);
+      User.belongsToMany(models.Project, { through: 'Project_User' });
+    }
   }
   User.init(
     {
@@ -12,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       sex: DataTypes.STRING,
       addr: DataTypes.STRING,
       phone: DataTypes.STRING,
-      group_id: DataTypes.INTEGER,
+      groupId: DataTypes.INTEGER,
     },
     {
       sequelize,

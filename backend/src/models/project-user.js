@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Project_User.init(
     {
-      project_id: DataTypes.INTEGER,
-      user_id: DataTypes.INTEGER,
+      projectId: DataTypes.INTEGER,
+      userId: DataTypes.INTEGER,
     },
     {
       sequelize,

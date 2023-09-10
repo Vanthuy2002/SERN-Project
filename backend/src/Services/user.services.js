@@ -27,7 +27,38 @@ const deleteUser = async (id) => {
 };
 
 const getUserById = async (id) => {
-  const user = await db.User.findOne({ where: { id } });
+  const user = await db.User.findOne({
+    where: { id },
+    attributes: ['id', 'username', 'email', 'createdAt'],
+    include: { model: db.Group },
+    raw: true,
+    nest: true,
+  });
+
+  console.log('🚀 ~ getUserById ~ user:', user);
+
+  await db.Group.findAll({
+    where: { id },
+    include: { model: db.Role },
+    raw: true,
+    nest: true,
+  }); // get from table Group
+
+  const roles = await db.Role.findAll({
+    include: {
+      model: db.Group,
+      where: { id },
+      attributes: ['id', 'name', 'desc'],
+    },
+    attributes: ['id', 'url', 'desc'],
+    raw: true,
+    nest: true,
+  });
+  // get from table Role , get id, url, desc
+  // Group table get id, name , desc
+
+  console.log('🚀 ~ getUserById ~ roles:', roles);
+
   return user;
 };
 
