@@ -1,12 +1,18 @@
+import { titlePages } from '@/utils/contants';
+import { useEffect } from 'react';
 import { Col, Container, Row, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = titlePages.LOGIN;
+  }, []);
   return (
     <div className='bg-info-subtle'>
       <Container>
-        <Row className='min-vh-100 align-items-center'>
+        <Row className='min-vh-100 align-items-md-center align-items-start'>
           <Col className='d-none d-md-block' md={6}>
             <p className='h1 fw-bold text-start text-primary'>React App</p>
             <p className='text-start fw-semibold'>
@@ -15,6 +21,9 @@ export default function Login() {
             </p>
           </Col>
           <Col md={6}>
+            <p className='h1 my-5 d-md-none d-block fw-bold text-center text-primary'>
+              React App
+            </p>
             <div className='p-3 rounded shadow bg-white'>
               <Form autoComplete='off'>
                 <Form.Group className='mb-3' controlId='email'>
