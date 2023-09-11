@@ -13,7 +13,12 @@ const findUserByEmail = async (email) => {
   return false;
 };
 
-const register = async (body) => {
+const comparePassword = (password, hassPass) => {
+  const isMatched = bcrypt.compareSync(password, hassPass);
+  return isMatched;
+};
+
+const registerServices = async (body) => {
   const { email, password, username } = body;
   const isExist = await findUserByEmail(email);
   if (isExist) {
@@ -31,4 +36,25 @@ const register = async (body) => {
   };
 };
 
-module.exports = { register };
+const loginServices = async (body) => {
+  const { email, password } = body;
+  const user = await db.User.findOne({ where: { email }, raw: true });
+
+  if (!user) {
+    return {
+      message: 'Email or password not correct',
+      codeNum: -1,
+      user: '',
+    };
+  }
+  const isMatched = comparePassword(password, user.password);
+  if (isMatched) {
+    return {
+      message: 'Login successfully',
+      codeNum: 1,
+      user,
+    };
+  }
+};
+
+module.exports = { registerServices, loginServices };
