@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { loginServices } from '@/services/auth.services';
+import useAppStore from '@/store';
 
 const schema = yup.object({
   email: yup.string().required(validate.REQUIRED).email(validate.EMAIL),
@@ -15,7 +16,7 @@ const schema = yup.object({
 
 export default function Login() {
   const navigate = useNavigate();
-
+  const { setUser } = useAppStore((state) => state);
   const { register, handleSubmit, formState, reset } = useForm({
     resolver: yupResolver(schema),
   });
@@ -24,10 +25,11 @@ export default function Login() {
 
   const handleLogin = async (values) => {
     try {
-      const { codeNum, message } = await loginServices(values);
+      const { codeNum, message, user } = await loginServices(values);
       if (codeNum === 1) {
         toast.success(message);
         navigate('/');
+        setUser(user);
       } else {
         toast.info(message);
       }

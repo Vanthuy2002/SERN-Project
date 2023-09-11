@@ -8,12 +8,15 @@ import {
   Navbar,
 } from 'react-bootstrap';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-
-const isLogin = false;
+import { menuOptions } from '@/utils/contants';
+import useAppStore from '@/store';
 
 export default function BasicNav() {
   const navigate = useNavigate();
   const changeURL = (path) => navigate(path);
+
+  const { user } = useAppStore((state) => state);
+
   return (
     <Navbar expand='lg' className='bg-body-tertiary' fixed='top'>
       <Container>
@@ -29,31 +32,31 @@ export default function BasicNav() {
         </Link>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
-          <Nav className='w-100 align-items-center'>
+          <Nav className='w-100 align-items-lg-center '>
             <NavLink to='/' className='nav-link'>
               Home
             </NavLink>
             <NavDropdown
-              title='Actions'
+              title='Manager'
               id='basic-nav-dropdown'
               className='mb-2 mb-lg-0'
             >
-              <NavDropdown.Item href='#action/3.1'>Action</NavDropdown.Item>
-              <NavDropdown.Item href='#action/3.2'>
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href='#action/3.3'>Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href='#action/3.4'>
-                Separated link
-              </NavDropdown.Item>
+              {menuOptions.map((menu) => (
+                <Link
+                  key={menu.id}
+                  to={`/${menu.to}`}
+                  className='dropdown-item'
+                >
+                  {menu.name}
+                </Link>
+              ))}
             </NavDropdown>
 
             <div className='d-flex gap-2 flex-grow-1 justify-content-end align-items-center'>
-              {isLogin ? (
+              {user && user.id ? (
                 <Fragment>
                   <Image src='/Jisoo.jpg' className='avatar' roundedCircle />
-                  <span className='text-primary-emphasis'>Thuy Nguyen</span>
+                  <span className='text-primary-emphasis'>{user.username}</span>
                 </Fragment>
               ) : (
                 <Fragment>
