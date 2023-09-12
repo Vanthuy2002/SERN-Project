@@ -1,69 +1,56 @@
-const bcrypt = require('bcryptjs');
 const db = require('../models');
-
-const hashUserPassword = (password) => {
-  const salt = bcrypt.genSaltSync(10);
-  const hashPass = bcrypt.hashSync(password, salt);
-  return hashPass;
-};
-
-const createUser = async (email, password, username) => {
-  if (!email || !password) {
-    throw new Error('Please enter complete data');
-  }
-  const hashPass = hashUserPassword(password);
-  await db.User.create({ email, password: hashPass, username });
-};
+const { findUserByEmail } = require('./auth.services');
+const { hashUserPassword } = require('./web.services');
 
 const getUsers = async () => {
-  const users = await db.User.findAll();
-  return users;
-};
-
-const deleteUser = async (id) => {
-  await db.User.destroy({
-    where: { id },
-  });
-};
-
-const getUserById = async (id) => {
-  const user = await db.User.findOne({
-    where: { id },
+  const users = await db.User.findAll({
     attributes: ['id', 'username', 'email', 'createdAt'],
-    include: { model: db.Group },
-    raw: true,
-    nest: true,
+    include: { model: db.Group, attributes: ['id', 'name', 'desc'] },
   });
-
-  console.log('🚀 ~ getUserById ~ user:', user);
-
-  await db.Group.findAll({
-    where: { id },
-    include: { model: db.Role },
-    raw: true,
-    nest: true,
-  }); // get from table Group
-
-  const roles = await db.Role.findAll({
-    include: {
-      model: db.Group,
-      where: { id },
-      attributes: ['id', 'name', 'desc'],
-    },
-    attributes: ['id', 'url', 'desc'],
-    raw: true,
-    nest: true,
-  });
-  // get from table Role , get id, url, desc
-  // Group table get id, name , desc
-
-  console.log('🚀 ~ getUserById ~ roles:', roles);
-
-  return user;
+  if (users) {
+    return {
+      message: 'Get users successfully',
+      codeNum: 1,
+      users,
+    };
+  }
+  return {
+    message: 'No users was found',
+    codeNum: 0,
+    users: [],
+  };
 };
 
-const updateUser = async (username, email, id) => {
-  await db.User.update({ username, email }, { where: { id } });
+const createUser = async (body) => {
+  const { email, password, username } = body;
+  const isExist = await findUserByEmail(email);
+
+  if (isExist)
+    return {
+      message: 'User already exists',
+      codeNum: 0,
+      status: 400,
+    };
+
+  const hashPass = hashUserPassword(password);
+  const user = await db.User.create({ email, password: hashPass, username });
+  if (user) {
+    return {
+      message: 'Create an user ok',
+      codeNum: 1,
+      status: 201,
+    };
+  } else {
+    return {
+      message: 'An error, try again',
+      codeNum: 0,
+      status: 500,
+    };
+  }
 };
 
-module.exports = { createUser, getUsers, deleteUser, getUserById, updateUser };
+const updateUser = async () => {};
+
+const deleteUser = async () => {};
+
+module.exports = { getUsers, createUser, updateUser, deleteUser };

@@ -4,7 +4,7 @@ const {
   deleteUser,
   getUserById,
   updateUser,
-} = require('../../Services/user.services');
+} = require('../../services/web.services');
 
 const renderHomePage = async (req, res) => {
   try {

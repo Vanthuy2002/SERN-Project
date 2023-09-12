@@ -63,4 +63,4 @@ const loginServices = async (body) => {
   }
 };
 
-module.exports = { registerServices, loginServices };
+module.exports = { registerServices, loginServices, findUserByEmail };

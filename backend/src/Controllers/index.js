@@ -1,4 +1,4 @@
 const webCtrl = require('./web');
-const apiCtrl = require('./api');
+const authCtrl = require('./auth');
 
-module.exports = { webCtrl, apiCtrl };
+module.exports = { webCtrl, authCtrl };

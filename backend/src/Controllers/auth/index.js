@@ -1,7 +1,7 @@
 const {
   loginServices,
   registerServices,
-} = require('../../Services/api.services');
+} = require('../../services/auth.services');
 
 const handleRegister = async (req, res) => {
   try {
@@ -21,6 +21,6 @@ const handleLogin = async (req, res) => {
   }
 };
 
-const apiCtrl = { handleRegister, handleLogin };
+const authCtrl = { handleRegister, handleLogin };
 
-module.exports = apiCtrl;
+module.exports = authCtrl;
