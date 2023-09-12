@@ -1,10 +1,13 @@
-import { Fragment } from 'react';
-import { Outlet } from 'react-router-dom';
+import { titlePages } from '@/utils/contants';
+import { Fragment, useEffect } from 'react';
 
 export default function User() {
+  useEffect(() => {
+    document.title = titlePages.MANAGER_USER;
+  }, []);
   return (
     <Fragment>
-      <Outlet></Outlet>
+      <h1>This is User</h1>
     </Fragment>
   );
 }

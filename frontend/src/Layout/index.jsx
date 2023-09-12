@@ -1,17 +1,22 @@
 import BasicNav from '@/components/Navs';
-import PropTypes from 'prop-types';
+import useAppStore from '@/store';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
-function MainLayout({ children }) {
+function MainLayout() {
+  const { user } = useAppStore((state) => state);
+  const { pathname } = useLocation();
   return (
     <main className='App'>
       <BasicNav />
-      <section className='spacing-to-nav'>{children}</section>
+      <section className='spacing-to-nav'>
+        {(user && user?.email) || pathname === '/' ? (
+          <Outlet />
+        ) : (
+          <Navigate to='/login' />
+        )}
+      </section>
     </main>
   );
 }
-
-MainLayout.propTypes = {
-  children: PropTypes.node,
-};
 
 export default MainLayout;

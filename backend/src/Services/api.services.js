@@ -54,6 +54,12 @@ const loginServices = async (body) => {
       codeNum: 1,
       user,
     };
+  } else {
+    return {
+      message: 'Email or password not correct',
+      codeNum: -1,
+      user: '',
+    };
   }
 };
 

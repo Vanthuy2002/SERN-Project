@@ -16,8 +16,8 @@ const schema = yup.object({
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser } = useAppStore((state) => state);
-  const { register, handleSubmit, formState, reset } = useForm({
+  const { setUser, user } = useAppStore((state) => state);
+  const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -33,11 +33,16 @@ export default function Login() {
       } else {
         toast.info(message);
       }
-      reset();
     } catch (exection) {
       toast.error(exection.toString());
     }
   };
+
+  useEffect(() => {
+    if (user && user?.email) {
+      navigate('/');
+    }
+  }, [navigate, user]);
 
   useEffect(() => {
     document.title = titlePages.LOGIN;

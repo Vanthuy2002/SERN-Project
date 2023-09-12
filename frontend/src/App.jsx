@@ -1,11 +1,11 @@
 import { Fragment } from 'react';
-import Routing from '@/Routes';
+import { AppRoutes } from '@/Routes';
 import Toasty from '@/components/Toasty';
 
 export default function App() {
   return (
     <Fragment>
-      <Routing />
+      <AppRoutes />
       <Toasty />
     </Fragment>
   );

@@ -2,6 +2,7 @@ const titlePages = {
   HOME: 'Home Pages',
   LOGIN: 'Login with your accounts',
   REGISTER: 'Create an accounts',
+  MANAGER_USER: 'Manage users',
 };
 
 const validate = {
