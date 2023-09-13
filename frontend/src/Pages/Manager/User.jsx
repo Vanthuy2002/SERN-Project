@@ -32,7 +32,7 @@ export default function User() {
         </Col>
         <Col>
           <div className='d-flex gap-2 justify-content-end'>
-            <Button>Refresh</Button>
+            <Button onClick={getAllUsers}>Refresh</Button>
             <Button variant='warning'>Create</Button>
           </div>
         </Col>

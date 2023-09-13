@@ -61,6 +61,22 @@ const createUser = async (body) => {
 
 const updateUser = async () => {};
 
-const deleteUser = async () => {};
+const deleteUser = async (id) => {
+  const user = await db.User.findOne({ where: { id } });
+  if (user) {
+    await db.User.destroy({
+      where: { id },
+    });
+    return {
+      message: 'Delete user successfully!',
+      codeNum: 1,
+    };
+  } else {
+    return {
+      message: 'Can not delete user!',
+      codeNum: 0,
+    };
+  }
+};
 
 module.exports = { getUsersAndPaginate, createUser, updateUser, deleteUser };

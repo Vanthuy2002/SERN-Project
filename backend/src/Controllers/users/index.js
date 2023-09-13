@@ -1,6 +1,7 @@
 const {
   getUsersAndPaginate,
   createUser,
+  deleteUser,
 } = require('../../services/user.services');
 
 const handleGetUsers = async (req, res) => {
@@ -28,7 +29,15 @@ const handleCreateUser = async (req, res) => {
 
 const handleUpdateUser = async (req, res) => {};
 
-const handleDelete = async (req, res) => {};
+const handleDelete = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const { message, codeNum } = await deleteUser(id);
+    res.status(200).json({ message, codeNum });
+  } catch (exection) {
+    res.status(500).json({ message: exection });
+  }
+};
 
 const userCtrl = {
   handleGetUsers,
