@@ -17,4 +17,8 @@ const menuOptions = [
   { id: 2, name: 'Permission', to: 'manage/role' },
 ];
 
-export { titlePages, validate, menuOptions };
+const formatTime = (date) => {
+  return new Date(date).toLocaleString();
+};
+
+export { titlePages, validate, menuOptions, formatTime };

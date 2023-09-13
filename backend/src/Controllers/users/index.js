@@ -1,9 +1,17 @@
-const { getUsers, createUser } = require('../../services/user.services');
+const {
+  getUsersAndPaginate,
+  createUser,
+} = require('../../services/user.services');
 
 const handleGetUsers = async (req, res) => {
+  let { page = 1, limit = 2 } = req.query;
+  page = parseInt(page);
+  limit = parseInt(limit);
+
   try {
-    const { message, users, codeNum } = await getUsers();
-    res.status(200).json({ message, codeNum, users });
+    const { message, codeNum, count, users, totalPages } =
+      await getUsersAndPaginate(page, limit);
+    res.status(200).json({ message, codeNum, count, totalPages, users });
   } catch (exection) {
     res.status(404).json(exection);
   }

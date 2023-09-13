@@ -2,21 +2,31 @@ const db = require('../models');
 const { findUserByEmail } = require('./auth.services');
 const { hashUserPassword } = require('./web.services');
 
-const getUsers = async () => {
-  const users = await db.User.findAll({
-    attributes: ['id', 'username', 'email', 'createdAt'],
+const getUsersAndPaginate = async (page, limit) => {
+  const offset = (page - 1) * limit;
+
+  const { count, rows } = await db.User.findAndCountAll({
+    attributes: ['id', 'username', 'email', 'createdAt', 'updatedAt'],
     include: { model: db.Group, attributes: ['id', 'name', 'desc'] },
+    offset,
+    limit,
   });
+  const totalPages = Math.ceil(count / limit);
+  const users = [...rows];
+
   if (users) {
     return {
       message: 'Get users successfully',
       codeNum: 1,
+      count,
       users,
+      totalPages,
     };
   }
   return {
     message: 'No users was found',
     codeNum: 0,
+    count: 0,
     users: [],
   };
 };
@@ -53,4 +63,4 @@ const updateUser = async () => {};
 
 const deleteUser = async () => {};
 
-module.exports = { getUsers, createUser, updateUser, deleteUser };
+module.exports = { getUsersAndPaginate, createUser, updateUser, deleteUser };
