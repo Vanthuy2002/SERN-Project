@@ -7,7 +7,7 @@ function ModalBase({ isShow, id, onDelete, onClose }) {
       <Modal.Header closeButton>
         <Modal.Title>Delete User</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Are you sure, this action can not be undo!</Modal.Body>
+      <Modal.Body>Are you sure???, this action can not be undo!</Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={onClose}>
           Cancel

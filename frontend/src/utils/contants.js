@@ -14,7 +14,7 @@ const validate = {
 
 const menuOptions = [
   { id: 1, name: 'User', to: 'manage/user' },
-  { id: 2, name: 'Permission', to: 'manage/role' },
+  { id: 2, name: 'Roles', to: 'manage/role' },
 ];
 
 const formatTime = (date) => {

@@ -1,24 +1,23 @@
-import { api } from '@/config';
 import { formatTime } from '@/utils/contants';
 import PropTypes from 'prop-types';
 import { Fragment, useState } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import ModalBase from '../Modal';
+import { ModalBase } from '../Modal';
+import { deleteUser } from '@/services/user.services';
 
 function TableBase({ users }) {
   const [isShow, setIsShow] = useState(false);
-  const [idUser, setIdUser] = useState();
+  const [idUser, setIdUser] = useState(null);
 
   const onToggle = (id) => {
     setIsShow(!isShow);
     setIdUser(id);
   };
 
-  const deleteUser = async (id) => {
+  const handleDelete = async (id) => {
     try {
-      const res = await api.delete(`api/user/${id}`);
-      const { message, codeNum } = res.data;
+      const { message, codeNum } = await deleteUser(id);
       if (codeNum === 1) {
         toast.success(message);
       } else {
@@ -57,7 +56,7 @@ function TableBase({ users }) {
                 <td>
                   <div className='d-flex gap-2 align-items-center'>
                     <Button variant='warning'>Edit</Button>
-                    <Button onClick={() => onToggle(user?.id)} variant='danger'>
+                    <Button onClick={() => onToggle(user.id)} variant='danger'>
                       Remove
                     </Button>
                   </div>
@@ -77,7 +76,7 @@ function TableBase({ users }) {
         id={idUser}
         isShow={isShow}
         onClose={onToggle}
-        onDelete={deleteUser}
+        onDelete={handleDelete}
       />
     </Fragment>
   );
