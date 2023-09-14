@@ -32,7 +32,7 @@ const getUsersAndPaginate = async (page, limit) => {
 };
 
 const createUser = async (body) => {
-  const { email, password, username } = body;
+  const { email, password, username, phone, addr, groupId, sex } = body;
   const isExist = await findUserByEmail(email);
 
   if (isExist)
@@ -43,7 +43,15 @@ const createUser = async (body) => {
     };
 
   const hashPass = hashUserPassword(password);
-  const user = await db.User.create({ email, password: hashPass, username });
+  const user = await db.User.create({
+    email,
+    password: hashPass,
+    username,
+    phone,
+    addr,
+    sex,
+    groupId,
+  });
   if (user) {
     return {
       message: 'Create an user ok',

@@ -1,4 +1,4 @@
-import { getAllGroups } from '@/services/user.services';
+import { createUser, getAllGroups } from '@/services/user.services';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Button, Modal, Form, Row, Col, Spinner } from 'react-bootstrap';
@@ -18,7 +18,7 @@ const schema = yup.object({
 
 function ModalUser({ isShow, onClose, updateMode }) {
   const [groupRole, setGroupRole] = useState([]);
-  const { formState, register, handleSubmit } = useForm({
+  const { formState, register, handleSubmit, reset } = useForm({
     resolver: yupResolver(schema),
   });
   const { errors, isSubmitting } = formState;
@@ -33,7 +33,20 @@ function ModalUser({ isShow, onClose, updateMode }) {
   };
 
   const handleCreateUser = async (values) => {
-    console.log('🚀 ~ handleCreateUser ~ values:', values);
+    try {
+      const { message, codeNum } = await createUser(values);
+      if (codeNum === 1) {
+        toast.success(message);
+      } else {
+        toast.error(message);
+      }
+      reset();
+      onClose();
+    } catch (e) {
+      if (e?.response) {
+        toast.info(e?.response?.data?.message);
+      }
+    }
   };
 
   useEffect(() => {
@@ -120,12 +133,9 @@ function ModalUser({ isShow, onClose, updateMode }) {
               </Form.Group>
             </Col>
             <Col md={6}>
-              <Form.Group className='mb-3' controlId='role'>
+              <Form.Group className='mb-3' controlId='groupId'>
                 <Form.Label>Role *</Form.Label>
-                <Form.Select
-                  {...register('role')}
-                  aria-label='Default select example'
-                >
+                <Form.Select {...register('groupId')}>
                   <option>Choose role</option>
                   {groupRole &&
                     groupRole.length > 0 &&
@@ -177,6 +187,7 @@ ModalUser.propTypes = {
   isShow: PropTypes.bool,
   onClose: PropTypes.func,
   updateMode: PropTypes.bool,
+  updateData: PropTypes.object,
 };
 
 export default ModalUser;

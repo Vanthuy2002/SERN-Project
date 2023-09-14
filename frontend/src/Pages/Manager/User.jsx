@@ -25,6 +25,7 @@ export default function User() {
   }, [page]);
 
   const handlePageChange = (e) => setPage(e.selected + 1);
+
   const onToggle = () => setIsShow(!isShow);
 
   return (

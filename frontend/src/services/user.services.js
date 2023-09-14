@@ -5,6 +5,11 @@ const getAllUsers = async (page) => {
   return res.data;
 };
 
+const createUser = async (body) => {
+  const res = await api.post('api/user/create', body);
+  return res.data;
+};
+
 const getAllGroups = async () => {
   const res = await api.get('group');
   return res.data;
@@ -15,4 +20,4 @@ const deleteUser = async (id) => {
   return res.data;
 };
 
-export { getAllGroups, getAllUsers, deleteUser };
+export { getAllGroups, getAllUsers, deleteUser, createUser };

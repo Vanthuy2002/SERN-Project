@@ -5,14 +5,21 @@ import { Button, Table } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { ModalBase } from '../Modal';
 import { deleteUser } from '@/services/user.services';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function TableBase({ users }) {
   const [isShow, setIsShow] = useState(false);
   const [idUser, setIdUser] = useState(null);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const onToggle = (id) => {
     setIsShow(!isShow);
     setIdUser(id);
+  };
+
+  const changePath = async (id) => {
+    navigate(`${pathname}/${id}?update=true`);
   };
 
   const handleDelete = async (id) => {
@@ -55,7 +62,12 @@ function TableBase({ users }) {
                 <td>{formatTime(user?.updatedAt)}</td>
                 <td>
                   <div className='d-flex gap-2 align-items-center'>
-                    <Button variant='warning'>Edit</Button>
+                    <Button
+                      onClick={() => changePath(user?.id)}
+                      variant='warning'
+                    >
+                      Edit
+                    </Button>
                     <Button onClick={() => onToggle(user.id)} variant='danger'>
                       Remove
                     </Button>
@@ -84,6 +96,7 @@ function TableBase({ users }) {
 
 TableBase.propTypes = {
   users: PropTypes.array,
+  onUpdateMode: PropTypes.func,
 };
 
 export default TableBase;

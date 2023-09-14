@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import Loading from '@/components/Loading';
 import MainLayout from '@/Layout';
+import EditUser from '@/Pages/Manager/EditUser';
 
 const Home = lazy(() => import('@/Pages/Home'));
 const Login = lazy(() => import('@/Pages/Login'));
@@ -15,6 +16,7 @@ export default function AppRoutes() {
         <Route element={<MainLayout />}>
           <Route path='/' element={<Home />} />
           <Route path='manage/user' element={<User />} />
+          <Route path='manage/user/:id' element={<EditUser />} />
         </Route>
 
         <Route path='login' element={<Login />} />

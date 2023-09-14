@@ -28,7 +28,7 @@ export default function BasicNav() {
             height='30'
             className='d-inline-block align-top'
           />{' '}
-          React App
+          <span className='text-primary fw-bold'>React App</span>
         </Link>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
