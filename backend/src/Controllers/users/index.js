@@ -2,6 +2,8 @@ const {
   getUsersAndPaginate,
   createUser,
   deleteUser,
+  getUser,
+  updateUser,
 } = require('../../services/user.services');
 
 const handleGetUsers = async (req, res) => {
@@ -27,7 +29,26 @@ const handleCreateUser = async (req, res) => {
   }
 };
 
-const handleUpdateUser = async (req, res) => {};
+const handleGetUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const { message, codeNum, user } = await getUser(id);
+    res.status(200).json({ message, codeNum, user });
+  } catch (exection) {
+    res.status(500).json({ message: exection });
+  }
+};
+
+const handleUpdateUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const { message, codeNum, user } = await updateUser(id, req.body);
+    res.status(200).json({ message, codeNum, user });
+  } catch (exection) {
+    debugger;
+    res.status(400).json({ message: exection.toString() });
+  }
+};
 
 const handleDelete = async (req, res) => {
   const { id } = req.params;
@@ -44,6 +65,7 @@ const userCtrl = {
   handleCreateUser,
   handleDelete,
   handleUpdateUser,
+  handleGetUser,
 };
 
 module.exports = userCtrl;

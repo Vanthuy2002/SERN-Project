@@ -67,7 +67,45 @@ const createUser = async (body) => {
   }
 };
 
-const updateUser = async () => {};
+const getUser = async (id) => {
+  const user = await db.User.findOne({
+    where: { id },
+    attributes: ['id', 'username', 'email', 'phone', 'addr', 'sex', 'groupId'],
+  });
+  if (user) {
+    return {
+      message: 'Get user ok',
+      codeNum: 1,
+      user,
+    };
+  } else {
+    return {
+      message: 'No user not found',
+      codeNum: 0,
+      user: [],
+    };
+  }
+};
+
+const updateUser = async (id, body) => {
+  const { username, sex, groupId, addr, phone } = body;
+  const user = await db.User.findOne({ where: { id } });
+  if (user) {
+    await user.update({ username, sex, groupId, addr, phone });
+    await user.save();
+    return {
+      message: 'Update user successfully!',
+      codeNum: 1,
+      user,
+    };
+  } else {
+    return {
+      message: 'User not found',
+      codeNum: 0,
+      user: {},
+    };
+  }
+};
 
 const deleteUser = async (id) => {
   const user = await db.User.findOne({ where: { id } });
@@ -87,4 +125,10 @@ const deleteUser = async (id) => {
   }
 };
 
-module.exports = { getUsersAndPaginate, createUser, updateUser, deleteUser };
+module.exports = {
+  getUsersAndPaginate,
+  createUser,
+  updateUser,
+  deleteUser,
+  getUser,
+};

@@ -4,6 +4,8 @@ const userRoutes = require('express').Router();
 
 userRoutes.get('/user', userCtrl.handleGetUsers);
 
+userRoutes.get('/user/:id', userCtrl.handleGetUser);
+
 userRoutes.post('/user/create', userCtrl.handleCreateUser);
 
 userRoutes.patch('/user/:id', userCtrl.handleUpdateUser);

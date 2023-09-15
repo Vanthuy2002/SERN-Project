@@ -1,7 +1,7 @@
 import { api } from '@/config';
 
 const getAllUsers = async (page) => {
-  const res = await api.get(`api/user?page=${page}`);
+  const res = await api.get(`api/user?page=${page}&limit=3`);
   return res.data;
 };
 
@@ -15,9 +15,26 @@ const getAllGroups = async () => {
   return res.data;
 };
 
+const getUser = async (id) => {
+  const res = await api.get(`api/user/${id}`);
+  return res.data;
+};
+
+const updateUser = async (id, body) => {
+  const res = await api.patch(`api/user/${id}`, body);
+  return res.data;
+};
+
 const deleteUser = async (id) => {
   const res = await api.delete(`api/user/${id}`);
   return res.data;
 };
 
-export { getAllGroups, getAllUsers, deleteUser, createUser };
+export {
+  getAllGroups,
+  getAllUsers,
+  deleteUser,
+  createUser,
+  getUser,
+  updateUser,
+};

@@ -19,7 +19,7 @@ function TableBase({ users }) {
   };
 
   const changePath = async (id) => {
-    navigate(`${pathname}/${id}?update=true`);
+    navigate(`${pathname}/${id}`);
   };
 
   const handleDelete = async (id) => {
