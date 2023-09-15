@@ -6,7 +6,7 @@ let api = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
+api.defaults.withCredentials = true;
 api.interceptors.request.use(
   function (config) {
     // Do something before request is sent

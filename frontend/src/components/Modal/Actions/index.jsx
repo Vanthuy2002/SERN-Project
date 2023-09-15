@@ -134,9 +134,9 @@ function ModalUser({ isShow, onClose, updateMode }) {
             </Col>
             <Col md={6}>
               <Form.Group className='mb-3' controlId='groupId'>
-                <Form.Label>Role *</Form.Label>
+                <Form.Label>You are *</Form.Label>
                 <Form.Select {...register('groupId')}>
-                  <option>Choose role</option>
+                  <option>Choose one</option>
                   {groupRole &&
                     groupRole.length > 0 &&
                     groupRole.map((group) => (

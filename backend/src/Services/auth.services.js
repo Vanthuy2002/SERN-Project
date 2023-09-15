@@ -1,5 +1,7 @@
 const db = require('../models');
 const bcrypt = require('bcryptjs');
+const { getGroupWithRoles } = require('../services/jwt.services');
+const { generateToken } = require('../middleware/auth');
 
 const hashUserPassword = (password) => {
   const salt = bcrypt.genSaltSync(10);
@@ -21,6 +23,7 @@ const comparePassword = (password, hassPass) => {
 const registerServices = async (body) => {
   const { email, password, username } = body;
   const isExist = await findUserByEmail(email);
+
   if (isExist) {
     return {
       message: 'User already exits',
@@ -28,7 +31,12 @@ const registerServices = async (body) => {
     };
   }
   const hashPass = hashUserPassword(password);
-  const user = await db.User.create({ email, password: hashPass, username });
+  const user = await db.User.create({
+    email,
+    username,
+    password: hashPass,
+    groupId: 2, //User
+  });
   return {
     message: 'Create user successfully!',
     codeNum: 1,
@@ -42,23 +50,29 @@ const loginServices = async (body) => {
 
   if (!user) {
     return {
-      message: 'Email or password not correct',
+      message: 'You are not register',
       codeNum: -1,
-      user: '',
     };
   }
   const isMatched = comparePassword(password, user.password);
   if (isMatched) {
+    const roles = await getGroupWithRoles(user);
+    const payload = {
+      email: user.email,
+      roles,
+    };
+    const accessToken = generateToken(payload);
     return {
       message: 'Login successfully',
       codeNum: 1,
       user,
+      roles,
+      accessToken,
     };
   } else {
     return {
       message: 'Email or password not correct',
       codeNum: -1,
-      user: '',
     };
   }
 };
