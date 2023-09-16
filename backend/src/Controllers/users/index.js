@@ -10,7 +10,6 @@ const handleGetUsers = async (req, res) => {
   let { page = 1, limit = 2 } = req.query;
   page = parseInt(page);
   limit = parseInt(limit);
-
   try {
     const { message, codeNum, count, users, totalPages } =
       await getUsersAndPaginate(page, limit);

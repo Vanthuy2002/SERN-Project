@@ -39,11 +39,15 @@ export default function EditUser() {
 
   const handleGetUser = async () => {
     try {
-      const { user } = await getUser(id);
+      const { user, message, codeNum } = await getUser(id);
+      if (codeNum === 0) {
+        toast.info(message);
+        return false;
+      }
       setUserEmail(user?.email);
       reset({ ...user });
-    } catch (exection) {
-      toast.error(exection.toString());
+    } catch (err) {
+      console.log('🚀 ~ handleGetUser ~ err:', err);
     }
   };
 
@@ -57,9 +61,7 @@ export default function EditUser() {
         toast.error(message);
       }
     } catch (e) {
-      if (e.response) {
-        toast.error(e?.response?.data?.message);
-      }
+      toast.error(e?.data?.message);
     }
   };
 

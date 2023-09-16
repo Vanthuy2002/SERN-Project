@@ -28,11 +28,11 @@ function TableBase({ users }) {
       if (codeNum === 1) {
         toast.success(message);
       } else {
-        toast.error(message);
+        toast.info(message);
       }
       setIsShow(false);
-    } catch (exection) {
-      toast.error(exection.toString());
+    } catch (e) {
+      console.log('🚀 ~ handleDelete ~ err:', e);
     }
   };
 

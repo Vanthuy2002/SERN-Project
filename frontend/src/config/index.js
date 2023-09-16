@@ -18,4 +18,13 @@ api.interceptors.request.use(
   }
 );
 
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (err) => {
+    return err.response;
+  }
+);
+
 export { api };
