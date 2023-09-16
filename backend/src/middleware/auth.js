@@ -27,6 +27,9 @@ const verifyToken = (token) => {
 };
 
 const checkToken = (req, res, next) => {
+  const byPassURL = ['/', '/register', '/login'];
+  if (byPassURL.includes(req.path)) next();
+
   const token = req.cookies?.accessToken;
   if (token) {
     const decoded = verifyToken(token);

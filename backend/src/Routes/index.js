@@ -5,9 +5,11 @@ const groupRoutes = require('./groups');
 const { checkToken, checkPermission } = require('../middleware/auth');
 
 const defineRoutes = (app) => {
+  app.all('*', checkToken);
+
   app.use('/', webRoutes);
   app.use('/auth', authRoutes);
-  app.use('/api', checkToken, checkPermission, userRoutes);
+  app.use('/api', checkPermission, userRoutes);
   app.use('/group', groupRoutes);
 };
 
