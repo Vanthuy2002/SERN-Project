@@ -3,13 +3,13 @@ import useAppStore from '@/store';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 function MainLayout() {
-  const { user } = useAppStore((state) => state);
+  const { authInfo } = useAppStore((state) => state);
   const { pathname } = useLocation();
   return (
     <main className='App'>
       <BasicNav />
       <section className='spacing-to-nav'>
-        {(user && user?.email) || pathname === '/' ? (
+        {(authInfo && authInfo?.user) || pathname === '/' ? (
           <Outlet />
         ) : (
           <Navigate to='/login' />

@@ -46,7 +46,11 @@ const registerServices = async (body) => {
 
 const loginServices = async (body) => {
   const { email, password } = body;
-  const user = await db.User.findOne({ where: { email }, raw: true });
+  const user = await db.User.findOne({
+    where: { email },
+    raw: true,
+    attributes: ['email', 'username', 'password', 'groupId'],
+  });
 
   if (!user) {
     return {
@@ -56,16 +60,18 @@ const loginServices = async (body) => {
   }
   const isMatched = comparePassword(password, user.password);
   if (isMatched) {
-    const roles = await getGroupWithRoles(user);
+    const roles = await getGroupWithRoles(user?.groupId);
     const payload = {
       email: user.email,
       roles,
     };
+    const { password, ...response } = user;
+    // not response password
     const accessToken = generateToken(payload);
     return {
       message: 'Login successfully',
       codeNum: 1,
-      user,
+      user: response,
       roles,
       accessToken,
     };

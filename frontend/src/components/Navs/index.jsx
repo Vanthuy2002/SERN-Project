@@ -15,7 +15,7 @@ export default function BasicNav() {
   const navigate = useNavigate();
   const changeURL = (path) => navigate(path);
 
-  const { user } = useAppStore((state) => state);
+  const { authInfo } = useAppStore((state) => state);
 
   return (
     <Navbar expand='lg' className='bg-body-tertiary' fixed='top'>
@@ -53,10 +53,17 @@ export default function BasicNav() {
             </NavDropdown>
 
             <div className='d-flex gap-2 flex-grow-1 justify-content-end align-items-center'>
-              {user && user.id ? (
+              {authInfo && authInfo.user ? (
                 <Fragment>
-                  <Image src='/Jisoo.jpg' className='avatar' roundedCircle />
-                  <span className='text-primary-emphasis'>{user.username}</span>
+                  <Image
+                    src='/Jisoo.jpg'
+                    className='avatar'
+                    roundedCircle
+                    alt={authInfo?.user?.username}
+                  />
+                  <span className='text-primary-emphasis'>
+                    {authInfo?.user.username}
+                  </span>
                 </Fragment>
               ) : (
                 <Fragment>

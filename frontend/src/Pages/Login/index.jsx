@@ -16,7 +16,7 @@ const schema = yup.object({
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser, user } = useAppStore((state) => state);
+  const { setAuthInfo, authInfo } = useAppStore((state) => state);
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(schema),
   });
@@ -25,11 +25,14 @@ export default function Login() {
 
   const handleLogin = async (values) => {
     try {
-      const { codeNum, message, user } = await loginServices(values);
+      const { codeNum, message, user, roles, accessToken } =
+        await loginServices(values);
+
+      const data = { user, roles, accessToken };
       if (codeNum === 1) {
         toast.success(message);
+        setAuthInfo(data);
         navigate('/');
-        setUser(user);
       } else {
         toast.info(message);
       }
@@ -39,10 +42,10 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (user && user?.email) {
+    if (authInfo && authInfo?.user) {
       navigate('/');
     }
-  }, [navigate, user]);
+  }, [navigate, authInfo]);
 
   useEffect(() => {
     document.title = titlePages.LOGIN;

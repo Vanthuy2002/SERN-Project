@@ -27,10 +27,12 @@ const verifyToken = (token) => {
 };
 
 const checkToken = (req, res, next) => {
-  const byPassURL = ['/', '/register', '/login'];
-  if (byPassURL.includes(req.path)) next();
+  const byPassURL = ['/', '/auth/register', '/auth/login', '/group'];
+  if (byPassURL.includes(req.path)) {
+    return next();
+  }
 
-  const token = req.cookies?.accessToken;
+  const token = req?.cookies?.accessToken;
   if (token) {
     const decoded = verifyToken(token);
     req.user = decoded;

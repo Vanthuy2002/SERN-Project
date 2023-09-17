@@ -1,8 +1,8 @@
 const db = require('../models');
 
-const getGroupWithRoles = async (user) => {
+const getGroupWithRoles = async (groupId) => {
   const roles = await db.Group.findOne({
-    where: { id: user?.groupId },
+    where: { id: groupId },
     attributes: ['id', 'name', 'desc'],
     include: {
       model: db.Role,
