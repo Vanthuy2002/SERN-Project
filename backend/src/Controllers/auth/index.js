@@ -26,6 +26,18 @@ const handleLogin = async (req, res) => {
   }
 };
 
-const authCtrl = { handleRegister, handleLogin };
+const handleRefresh = async (req, res) => {
+  try {
+    const accessToken = req.token;
+    const user = { email: req?.user.email, username: req?.user.username };
+    const roles = { ...req?.user.roles };
+
+    res.status(200).json({ user, roles, accessToken });
+  } catch (exection) {
+    res.status(500).json({ message: exection.toString() });
+  }
+};
+
+const authCtrl = { handleRegister, handleLogin, handleRefresh };
 
 module.exports = authCtrl;

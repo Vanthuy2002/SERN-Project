@@ -36,6 +36,7 @@ const checkToken = (req, res, next) => {
   if (token) {
     const decoded = verifyToken(token);
     req.user = decoded;
+    req.token = token;
     if (decoded) {
       next();
     } else {

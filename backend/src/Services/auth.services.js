@@ -63,6 +63,7 @@ const loginServices = async (body) => {
     const roles = await getGroupWithRoles(user?.groupId);
     const payload = {
       email: user.email,
+      username: user.username,
       roles,
     };
     const { password, ...response } = user;

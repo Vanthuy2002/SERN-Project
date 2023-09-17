@@ -1,7 +1,7 @@
 import { api } from '@/config';
 
 const getAllUsers = async (page) => {
-  const res = await api.get(`api/user?page=${page}&limit=3`);
+  const res = await api.get(`api/user?page=${page}&limit=2`);
   return res.data;
 };
 

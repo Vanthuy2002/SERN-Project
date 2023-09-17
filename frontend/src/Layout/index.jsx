@@ -1,10 +1,15 @@
 import BasicNav from '@/components/Navs';
 import useAppStore from '@/store';
+import { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 function MainLayout() {
-  const { authInfo } = useAppStore((state) => state);
+  const { authInfo, refreshAuth } = useAppStore((state) => state);
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    refreshAuth();
+  }, [refreshAuth]);
   return (
     <main className='App'>
       <BasicNav />

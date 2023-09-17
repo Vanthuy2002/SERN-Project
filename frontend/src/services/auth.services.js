@@ -10,4 +10,9 @@ const loginServices = async (body) => {
   return res.data;
 };
 
-export { registerServices, loginServices };
+const refreshTokenServices = async () => {
+  const res = await api.get('auth/refresh');
+  return res.data;
+};
+
+export { registerServices, loginServices, refreshTokenServices };
