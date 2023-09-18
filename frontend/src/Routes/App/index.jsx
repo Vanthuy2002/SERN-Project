@@ -8,6 +8,7 @@ const Home = lazy(() => import('@/Pages/Home'));
 const Login = lazy(() => import('@/Pages/Login'));
 const Register = lazy(() => import('@/Pages/Register'));
 const User = lazy(() => import('@/Pages/Manager/User'));
+const Roles = lazy(() => import('@/Pages/Manager/Roles'));
 
 export default function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export default function AppRoutes() {
           <Route path='/' element={<Home />} />
           <Route path='manage/user' element={<User />} />
           <Route path='manage/user/:id' element={<EditUser />} />
+          <Route path='manage/role' element={<Roles />} />
         </Route>
 
         <Route path='login' element={<Login />} />

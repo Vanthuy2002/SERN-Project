@@ -12,3 +12,7 @@ a {
   height: 40px;
   object-fit: cover;
 }
+.icon {
+  width: 24px;
+  height: 24px;
+}
