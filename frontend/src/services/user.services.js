@@ -31,8 +31,8 @@ const deleteUser = async (id) => {
 };
 
 export {
-  getAllGroups,
   getAllUsers,
+  getAllGroups,
   deleteUser,
   createUser,
   getUser,

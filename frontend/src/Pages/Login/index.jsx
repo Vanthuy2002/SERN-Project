@@ -25,16 +25,15 @@ export default function Login() {
 
   const handleLogin = async (values) => {
     try {
-      const { codeNum, message, user, roles, accessToken } =
-        await loginServices(values);
+      const info = await loginServices(values);
+      const { message, codeNum, ...data } = info;
 
-      const data = { user, roles, accessToken };
       if (codeNum === 1) {
         toast.success(message);
         setAuthInfo(data);
         navigate('/');
       } else {
-        toast.info(message);
+        toast.info(info.message);
       }
     } catch (exection) {
       toast.error(exection.toString());

@@ -26,13 +26,28 @@ const verifyToken = (token) => {
   }
 };
 
+const extractToken = (req) => {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.split(' ')[0] === 'Bearer'
+  ) {
+    return req.headers.authorization.split(' ')[1];
+  }
+  return null;
+};
+
 const checkToken = (req, res, next) => {
   const byPassURL = ['/', '/auth/register', '/auth/login', '/group'];
   if (byPassURL.includes(req.path)) {
     return next();
   }
 
-  const token = req?.cookies?.accessToken;
+  const tokenFromHeader = extractToken(req);
+
+  const token = req.cookies.accessToken
+    ? req.cookies.accessToken
+    : tokenFromHeader;
+
   if (token) {
     const decoded = verifyToken(token);
     req.user = decoded;

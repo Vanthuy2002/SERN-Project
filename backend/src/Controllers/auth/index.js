@@ -1,5 +1,6 @@
 const {
   loginServices,
+  refreshServices,
   registerServices,
 } = require('../../services/auth.services');
 
@@ -18,7 +19,9 @@ const handleLogin = async (req, res) => {
       ...req.body,
     });
     if (user) {
-      res.cookie('accessToken', accessToken, { httpOnly: true });
+      res.cookie('accessToken', accessToken, {
+        sameSite: 'strict',
+      });
     }
     res.status(200).json({ message, codeNum, user, roles, accessToken });
   } catch (exection) {
@@ -28,11 +31,8 @@ const handleLogin = async (req, res) => {
 
 const handleRefresh = async (req, res) => {
   try {
-    const accessToken = req.token;
-    const user = { email: req?.user.email, username: req?.user.username };
-    const roles = { ...req?.user.roles };
-
-    res.status(200).json({ user, roles, accessToken });
+    const { accessToken, roles, user, codeNum, message } = refreshServices(req);
+    res.status(200).json({ message, codeNum, user, roles, accessToken });
   } catch (exection) {
     res.status(500).json({ message: exection.toString() });
   }

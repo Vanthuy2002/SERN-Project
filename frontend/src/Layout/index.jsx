@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import BasicNav from '@/components/Navs';
 import useAppStore from '@/store';
 import { useEffect } from 'react';
@@ -9,7 +10,8 @@ function MainLayout() {
 
   useEffect(() => {
     refreshAuth();
-  }, [refreshAuth]);
+  }, []);
+
   return (
     <main className='App'>
       <BasicNav />

@@ -84,4 +84,20 @@ const loginServices = async (body) => {
   }
 };
 
-module.exports = { registerServices, loginServices, findUserByEmail };
+const refreshServices = (req) => {
+  const user = { email: req?.user.email, username: req?.user.username };
+  const roles = { ...req?.user.roles };
+  if (user) {
+    return {
+      user,
+      roles,
+    };
+  }
+};
+
+module.exports = {
+  registerServices,
+  loginServices,
+  findUserByEmail,
+  refreshServices,
+};

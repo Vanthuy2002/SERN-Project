@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { getValueInCookies } from '@/utils/contants';
+
+const token = getValueInCookies('accessToken');
 
 let api = axios.create({
   baseURL: 'http://localhost:3200',
@@ -7,13 +10,15 @@ let api = axios.create({
   },
 });
 api.defaults.withCredentials = true;
+
 api.interceptors.request.use(
   function (config) {
-    // Do something before request is sent
+    if (!config.headers['Authorization']) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
     return config;
   },
   function (error) {
-    // Do something with request error
     return Promise.reject(error);
   }
 );
