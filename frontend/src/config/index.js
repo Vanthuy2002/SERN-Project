@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { getValueInCookies } from '@/utils/contants';
+import { getFromStore } from '@/utils/contants';
 
-const token = getValueInCookies('accessToken');
+const token = getFromStore('token');
 
 let api = axios.create({
   baseURL: 'http://localhost:3200',

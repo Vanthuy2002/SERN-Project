@@ -15,4 +15,14 @@ const refreshTokenServices = async () => {
   return res.data;
 };
 
-export { registerServices, loginServices, refreshTokenServices };
+const logoutServices = async () => {
+  const res = await api.get('auth/logout');
+  return res.data;
+};
+
+export {
+  registerServices,
+  loginServices,
+  refreshTokenServices,
+  logoutServices,
+};

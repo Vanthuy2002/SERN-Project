@@ -1,4 +1,4 @@
-import { titlePages, validate } from '@/utils/contants';
+import { saveToStore, titlePages, validate } from '@/utils/contants';
 import { useEffect } from 'react';
 import { Col, Container, Row, Form, Button, Spinner } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
@@ -31,6 +31,7 @@ export default function Login() {
       if (codeNum === 1) {
         toast.success(message);
         setAuthInfo(data);
+        saveToStore('token', data.accessToken);
         navigate('/');
       } else {
         toast.info(info.message);

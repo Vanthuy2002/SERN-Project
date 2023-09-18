@@ -2,6 +2,7 @@ const {
   loginServices,
   refreshServices,
   registerServices,
+  logoutServices,
 } = require('../../services/auth.services');
 
 const handleRegister = async (req, res) => {
@@ -20,6 +21,7 @@ const handleLogin = async (req, res) => {
     });
     if (user) {
       res.cookie('accessToken', accessToken, {
+        httpOnly: true,
         sameSite: 'strict',
       });
     }
@@ -38,6 +40,15 @@ const handleRefresh = async (req, res) => {
   }
 };
 
-const authCtrl = { handleRegister, handleLogin, handleRefresh };
+const handleLogout = async (req, res) => {
+  try {
+    const { codeNum, message } = logoutServices(res);
+    res.status(200).json({ message, codeNum });
+  } catch (exection) {
+    res.status(500).json({ message: exection.toString() });
+  }
+};
+
+const authCtrl = { handleRegister, handleLogin, handleRefresh, handleLogout };
 
 module.exports = authCtrl;

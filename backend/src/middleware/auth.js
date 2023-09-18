@@ -21,8 +21,8 @@ const verifyToken = (token) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     return decoded;
-  } catch (e) {
-    console.log(e.toString());
+  } catch (err) {
+    console.log('🚀 ~ verifyToken ~ err:', err.toString());
   }
 };
 

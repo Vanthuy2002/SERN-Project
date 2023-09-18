@@ -95,9 +95,18 @@ const refreshServices = (req) => {
   }
 };
 
+const logoutServices = (res) => {
+  res.clearCookie('accessToken');
+  return {
+    message: 'Logout sucessfully!!',
+    codeNum: 1,
+  };
+};
+
 module.exports = {
   registerServices,
   loginServices,
   findUserByEmail,
   refreshServices,
+  logoutServices,
 };

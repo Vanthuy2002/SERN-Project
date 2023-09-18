@@ -1,12 +1,18 @@
-import { refreshTokenServices } from '@/services/auth.services';
+import { logoutServices, refreshTokenServices } from '@/services/auth.services';
 import { create } from 'zustand';
 
 const useAppStore = create((set) => ({
-  authInfo: {},
+  authInfo: null,
   setAuthInfo: (data) => set(() => ({ authInfo: data })),
   refreshAuth: async () => {
     const dataInfo = await refreshTokenServices();
     dataInfo && set({ authInfo: dataInfo });
+  },
+  logoutAuth: async () => {
+    const { message, codeNum } = await logoutServices();
+    localStorage.removeItem('token');
+    set({ authInfo: null });
+    return { message, codeNum };
   },
 }));
 

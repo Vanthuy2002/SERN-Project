@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie';
-
 const titlePages = {
   HOME: 'Home Pages',
   LOGIN: 'Login with your accounts',
@@ -23,9 +21,20 @@ const formatTime = (date) => {
   return new Date(date).toLocaleString();
 };
 
-const getValueInCookies = (name) => {
-  const value = Cookies.get(name);
+const saveToStore = (key, value) => {
+  return localStorage.setItem(key, value);
+};
+
+const getFromStore = (key) => {
+  const value = localStorage.getItem(key);
   return value;
 };
 
-export { titlePages, validate, menuOptions, formatTime, getValueInCookies };
+export {
+  titlePages,
+  validate,
+  menuOptions,
+  formatTime,
+  getFromStore,
+  saveToStore,
+};

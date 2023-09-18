@@ -88,7 +88,7 @@ function TableBase({ users }) {
         id={idUser}
         isShow={isShow}
         onClose={onToggle}
-        onDelete={handleDelete}
+        onHandle={handleDelete}
       />
     </Fragment>
   );
