@@ -3,10 +3,13 @@ import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
 import { cloneDeep, createUUID, titlePages } from '@/utils/contants';
+import { toast } from 'react-toastify';
+import { createRoles } from '@/services/role.service';
 
 const initVal = {
   url: '',
   desc: '',
+  isValid: false,
 };
 
 const Roles = () => {
@@ -14,6 +17,7 @@ const Roles = () => {
   const [list, setList] = useState({
     child: initVal,
   });
+  const [isLoad, setIsLoad] = useState(false);
 
   const addNewRole = () => {
     let listClone = cloneDeep(list);
@@ -30,12 +34,48 @@ const Roles = () => {
   const handleChange = (name, e, key) => {
     let listClone = cloneDeep(list);
     listClone[key][name] = e.target.value;
+    if (name === 'url' && e.target.value) {
+      listClone[key]['isValid'] = true;
+    }
     setList(listClone);
   };
 
-  const handleSubmit = (e) => {
+  const validate = () => {
+    const findInvalid = Object.entries(list).find(([, value]) => {
+      return (value && !value.url) || !value.desc;
+    });
+    return findInvalid;
+  };
+
+  const buildData = () => {
+    const listClone = cloneDeep(list);
+    const results = Object.entries(listClone).map(([, value]) => {
+      return {
+        url: value.url,
+        desc: value.desc,
+      };
+    });
+
+    return results;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(list);
+    setIsLoad(true);
+    const invalid = validate();
+    const data = buildData();
+    if (!invalid) {
+      const { message, codeNum } = await createRoles(data);
+      codeNum === 1 ? toast.success(message) : toast.info(message);
+      setIsLoad(false);
+    } else {
+      toast.info('This field is required');
+      const listClone = cloneDeep(list);
+      const key = invalid[0];
+      listClone[key]['isValid'] = true;
+      setList(listClone);
+      setIsLoad(false);
+    }
   };
 
   useEffect(() => {
@@ -55,7 +95,8 @@ const Roles = () => {
                   onChange={(e) => handleChange('url', e, key)}
                   value={value.url}
                   type='text'
-                  placeholder={`Role follow url...`}
+                  placeholder={`Eg : /user/read, ...`}
+                  className={!value.isValid && 'is-invalid'}
                 />
               </Form.Group>
             </Col>
@@ -68,6 +109,7 @@ const Roles = () => {
                   value={value.desc}
                   type='text'
                   placeholder='Some description...'
+                  className={!value.isValid && 'is-invalid'}
                 />
               </Form.Group>
             </Col>
@@ -86,8 +128,12 @@ const Roles = () => {
           </Row>
         ))}
 
-        <Button type='submit' className='d-flex gap-2 align-items-center'>
-          <span>Save</span>
+        <Button
+          disabled={isLoad}
+          type='submit'
+          className='d-flex gap-2 align-items-center'
+        >
+          <span>{isLoad ? 'Loading...' : 'Save'}</span>
           <CheckCircleIcon className='icon text-light' />
         </Button>
       </Form>
