@@ -5,7 +5,7 @@ function ModalBase({ isShow, id, onHandle, onClose, isLogout = false }) {
   return (
     <Modal show={isShow} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{isLogout ? 'Logout' : 'Delete User'}</Modal.Title>
+        <Modal.Title>{isLogout ? 'Logout' : 'Delete'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>Are you sure???, this action can not be undo!</Modal.Body>
       <Modal.Footer>

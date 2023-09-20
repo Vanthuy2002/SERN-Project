@@ -3,4 +3,10 @@ const { roleCtrl } = require('../../Controllers');
 
 roleRoutes.post('/create', roleCtrl.handleCreate);
 
+roleRoutes.get('/', roleCtrl.handleGetRoles);
+
+roleRoutes.get('/group/:id', roleCtrl.handleGetDetailRole);
+
+roleRoutes.delete('/delete/:id', roleCtrl.handleDeleteRole);
+
 module.exports = roleRoutes;

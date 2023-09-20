@@ -16,6 +16,7 @@ const validate = {
 const menuOptions = [
   { id: 1, name: 'User', to: 'manage/user' },
   { id: 2, name: 'Roles', to: 'manage/role' },
+  { id: 3, name: 'Assign Role', to: 'manage/action' },
 ];
 
 const createUUID = () => crypto.randomUUID();

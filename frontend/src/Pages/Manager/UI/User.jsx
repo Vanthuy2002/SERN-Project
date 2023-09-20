@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ModalUser } from '@/components/Modal';
 import Pagination from '@/components/Paginate';
-import TableBase from '@/components/Table';
+import { TableBase } from '@/components/Table';
 import { getAllUsers } from '@/services/user.services';
 import { titlePages } from '@/utils/contants';
 import { useEffect, useState } from 'react';

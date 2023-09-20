@@ -1,10 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
 import { cloneDeep, createUUID, titlePages } from '@/utils/contants';
 import { toast } from 'react-toastify';
-import { createRoles } from '@/services/role.service';
+import { createRoles, getAllRoles } from '@/services/role.service';
+import { TableRole } from '@/components/Table';
+import Pagination from '@/components/Paginate';
+import Heading from '@/components/Heading';
 
 const initVal = {
   url: '',
@@ -12,12 +16,25 @@ const initVal = {
   isValid: false,
 };
 
+const LIMIT = 2;
+
 const Roles = () => {
   const uuid = createUUID();
   const [list, setList] = useState({
     child: initVal,
   });
   const [isLoad, setIsLoad] = useState(false);
+  const [data, setData] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 0,
+  });
+
+  const getRoles = async () => {
+    const { totalPages, roles } = await getAllRoles(pagination.page, LIMIT);
+    setData(roles);
+    setPagination((prev) => ({ ...prev, totalPages }));
+  };
 
   const addNewRole = () => {
     let listClone = cloneDeep(list);
@@ -55,7 +72,6 @@ const Roles = () => {
         desc: value.desc,
       };
     });
-
     return results;
   };
 
@@ -68,6 +84,7 @@ const Roles = () => {
       const { message, codeNum } = await createRoles(data);
       codeNum === 1 ? toast.success(message) : toast.info(message);
       setIsLoad(false);
+      await getRoles();
     } else {
       toast.info('This field is required');
       const listClone = cloneDeep(list);
@@ -77,6 +94,13 @@ const Roles = () => {
       setIsLoad(false);
     }
   };
+
+  useEffect(() => {
+    getRoles();
+  }, [pagination.page]);
+
+  const handlePageChange = (e) =>
+    setPagination((prev) => ({ ...prev, page: e.selected + 1 }));
 
   useEffect(() => {
     document.title = titlePages.MANAGER_ROLE;
@@ -137,6 +161,13 @@ const Roles = () => {
           <CheckCircleIcon className='icon text-light' />
         </Button>
       </Form>
+
+      <Heading title='Manage Role' className='py-3' onRefresh={getRoles} />
+      <TableRole data={data} />
+      <Pagination
+        pageCount={pagination.totalPages}
+        onClick={handlePageChange}
+      />
     </Container>
   );
 };
