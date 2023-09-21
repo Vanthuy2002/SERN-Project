@@ -40,16 +40,20 @@ const AssignRole = () => {
   };
 
   const handleChange = async (e) => {
-    setGroup(e.target.value);
-    const { message, codeNum, group } = await getRoleByGroup(e.target.value);
-    setListRole(group?.Roles);
-    if (group.Roles.length === 0) {
-      toast.info('No roles was found');
-    } else {
-      codeNum === 1 ? toast.success(message) : toast.info(message);
+    try {
+      setGroup(e.target.value);
+      const { message, codeNum, group } = await getRoleByGroup(e.target.value);
+      setListRole(group?.Roles);
+      if (group.Roles.length === 0) {
+        toast.info('No roles was found');
+      } else {
+        codeNum === 1 ? toast.success(message) : toast.info(message);
+      }
+      const roleAssign = buildDataAssign(allRoles, group.Roles);
+      setListRole(roleAssign);
+    } catch (err) {
+      console.log(err.toString());
     }
-    const roleAssign = buildDataAssign(allRoles, group.Roles);
-    setListRole(roleAssign);
   };
 
   const onChangeCheck = (e) => {

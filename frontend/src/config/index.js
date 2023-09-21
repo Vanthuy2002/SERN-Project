@@ -4,7 +4,7 @@ import { getFromStore } from '@/utils/contants';
 const token = getFromStore('token');
 
 let api = axios.create({
-  baseURL: 'http://localhost:3200',
+  baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

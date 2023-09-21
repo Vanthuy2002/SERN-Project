@@ -19,3 +19,9 @@ a {
 .none-select {
   user-select: none;
 }
+
+.bg {
+  background: url('./bg.jpg') no-repeat center;
+  background-size: cover;
+  height: calc(100vh - 60px);
+}
