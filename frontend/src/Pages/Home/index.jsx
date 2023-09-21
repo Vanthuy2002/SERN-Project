@@ -2,6 +2,7 @@ import { titlePages } from '@/utils/contants';
 import { useEffect } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import bg from '/bg.jpg';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ export default function Home() {
   }, []);
 
   return (
-    <Container fluid className='bg'>
+    <Container fluid className='bg' style={{ backgroundImage: `url(${bg})` }}>
       <Row className='align-items-center justify-content-center h-100'>
         <Col className='text-center'>
           <h1 className='fw-bold'>Wellcome to my React App</h1>
