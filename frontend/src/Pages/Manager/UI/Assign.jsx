@@ -1,17 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Pagination from '@/components/Paginate';
-import { getAllRoles } from '@/services/role.service';
+import { getAllRoles, getRoleByGroup } from '@/services/role.service';
 import { getAllGroups } from '@/services/user.services';
+import { cloneDeep } from '@/utils/contants';
 import { Fragment, useEffect, useState } from 'react';
-import { Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-const LIMIT = 3;
+const LIMIT = 10;
 
 const AssignRole = () => {
   const [groupRole, setGroupRole] = useState([]);
   const [listRole, setListRole] = useState([]);
-  const [group, setGroup] = useState('');
+  const [allRoles, setAllRoles] = useState([]);
+  const [group, setGroup] = useState(0);
+
   const [pagination, setPagination] = useState({
     page: 1,
     totalPages: 0,
@@ -28,14 +31,40 @@ const AssignRole = () => {
 
   const getRoles = async () => {
     const { totalPages, roles } = await getAllRoles(pagination.page, LIMIT);
-    setListRole(roles);
+    setAllRoles(roles);
     setPagination((prev) => ({ ...prev, totalPages }));
   };
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     setGroup(e.target.value);
+    const { message, codeNum, group } = await getRoleByGroup(e.target.value);
+    setListRole(group?.Roles);
+    if (group.Roles.length === 0) {
+      toast.info('No roles was found');
+    } else {
+      codeNum === 1 ? toast.success(message) : toast.info(message);
+    }
+    const roleAssign = buildData(allRoles, group.Roles);
+    setListRole(roleAssign);
+  };
 
-    // call api
+  const onChangeCheck = (e) => {
+    let _listRole = cloneDeep(listRole);
+    let index = _listRole.findIndex((item) => item.id == e.target.value);
+
+    if (index > -1) _listRole[index].isAssign = !_listRole[index].isAssign;
+    setListRole(_listRole);
+  };
+
+  const buildData = (all, list) => {
+    let newArrRole = [];
+    if (!Array.isArray(all) || !Array.isArray(list)) return null;
+    all.map((role) => {
+      const obj = { ...role, isAssign: false };
+      obj.isAssign = list.some((item) => item.url === obj.url);
+      newArrRole.push(obj);
+    });
+    return newArrRole;
   };
 
   const handlePageChange = (e) =>
@@ -71,7 +100,8 @@ const AssignRole = () => {
         </Form>
 
         <Form>
-          {listRole &&
+          {group > 0 &&
+            listRole &&
             listRole.length > 0 &&
             listRole.map((role) => (
               <Form.Check
@@ -79,9 +109,16 @@ const AssignRole = () => {
                 type='switch'
                 id={role.url}
                 label={role.url}
+                value={role.id}
+                onChange={onChangeCheck}
+                checked={role?.isAssign}
                 className='none-select'
               />
             ))}
+
+          <Button type='submit' className='mt-3' variant='outline-primary'>
+            Save changes
+          </Button>
         </Form>
 
         <Pagination

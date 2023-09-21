@@ -15,4 +15,9 @@ const deleteService = async (id) => {
   return res.data;
 };
 
-export { createRoles, getAllRoles, deleteService };
+const getRoleByGroup = async (id) => {
+  const res = await api.get(`role/group/${id}`);
+  return res.data;
+};
+
+export { createRoles, getAllRoles, deleteService, getRoleByGroup };
