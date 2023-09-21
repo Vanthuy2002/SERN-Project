@@ -3,6 +3,7 @@ const {
   getAllRoles,
   deleteRole,
   getDetail,
+  assignRole,
 } = require('../../services/role.service');
 
 const handleCreate = async (req, res) => {
@@ -47,11 +48,21 @@ const handleGetDetailRole = async (req, res) => {
   }
 };
 
+const handleAssignRole = async (req, res) => {
+  try {
+    const { message, codeNum, status } = await assignRole(req.body);
+    res.status(status).json({ message, codeNum, status });
+  } catch (err) {
+    res.status(500).json({ message: err.toString() });
+  }
+};
+
 const roleCtrl = {
   handleCreate,
   handleGetRoles,
   handleDeleteRole,
   handleGetDetailRole,
+  handleAssignRole,
 };
 
 module.exports = roleCtrl;

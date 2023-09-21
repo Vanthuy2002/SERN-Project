@@ -108,4 +108,33 @@ const getDetail = async (id) => {
   }
 };
 
-module.exports = { createRoles, getAllRoles, deleteRole, getDetail };
+const assignRole = async (body) => {
+  const { groupId, data } = body;
+
+  await db.Group_Role.destroy({
+    where: { groupId: +groupId },
+  });
+
+  if (data.length > 0) {
+    await db.Group_Role.bulkCreate(data);
+    return {
+      message: `Create ${data.length} roles successfully!!`,
+      codeNum: 1,
+      status: 201,
+    };
+  } else {
+    return {
+      message: 'Nothing to update',
+      codeNum: 0,
+      status: 404,
+    };
+  }
+};
+
+module.exports = {
+  createRoles,
+  getAllRoles,
+  deleteRole,
+  getDetail,
+  assignRole,
+};

@@ -20,4 +20,9 @@ const getRoleByGroup = async (id) => {
   return res.data;
 };
 
-export { createRoles, getAllRoles, deleteService, getRoleByGroup };
+const assignRole = async (body) => {
+  const res = await api.post('role/assign', body);
+  return res.data;
+};
+
+export { createRoles, getAllRoles, deleteService, getRoleByGroup, assignRole };

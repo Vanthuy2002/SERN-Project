@@ -1,6 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Pagination from '@/components/Paginate';
-import { getAllRoles, getRoleByGroup } from '@/services/role.service';
+import {
+  assignRole,
+  getAllRoles,
+  getRoleByGroup,
+} from '@/services/role.service';
 import { getAllGroups } from '@/services/user.services';
 import { cloneDeep } from '@/utils/contants';
 import { Fragment, useEffect, useState } from 'react';
@@ -44,7 +48,7 @@ const AssignRole = () => {
     } else {
       codeNum === 1 ? toast.success(message) : toast.info(message);
     }
-    const roleAssign = buildData(allRoles, group.Roles);
+    const roleAssign = buildDataAssign(allRoles, group.Roles);
     setListRole(roleAssign);
   };
 
@@ -56,7 +60,7 @@ const AssignRole = () => {
     setListRole(_listRole);
   };
 
-  const buildData = (all, list) => {
+  const buildDataAssign = (all, list) => {
     let newArrRole = [];
     if (!Array.isArray(all) || !Array.isArray(list)) return null;
     all.map((role) => {
@@ -65,6 +69,33 @@ const AssignRole = () => {
       newArrRole.push(obj);
     });
     return newArrRole;
+  };
+
+  const buildData = () => {
+    let result = [];
+    let _listRole = cloneDeep(listRole);
+    _listRole.filter((role) => {
+      if (role.isAssign === true) {
+        const { id } = role;
+        result.push({ groupId: +group, roleId: id });
+      }
+    });
+    const body = {
+      groupId: +group,
+      data: result,
+    };
+    return body;
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    try {
+      const body = buildData();
+      const { message, codeNum } = await assignRole(body);
+      codeNum === 1 ? toast.success(message) : toast.info(message);
+    } catch (err) {
+      toast.error(err.data.message);
+    }
   };
 
   const handlePageChange = (e) =>
@@ -99,7 +130,7 @@ const AssignRole = () => {
           </Row>
         </Form>
 
-        <Form>
+        <Form onSubmit={handleSave}>
           {group > 0 &&
             listRole &&
             listRole.length > 0 &&
